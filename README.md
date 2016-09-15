@@ -6,7 +6,7 @@
 
 准备工作：
 bulid时需要的一些包 request，BeautifulSoup，等
-把含有单个文章连接的ttps://wenzhang.baidu.com的源代码保存在wenzhang_full.htm里面，方面脚本读取每行源代码
+把含有单个文章连接的https://wenzhang.baidu.com的源代码保存在wenzhang_full.htm里面，方便脚本读取每行源代码
 仅支持linux和mac系统，需要有chrome的cookies支持
 在Crawler.py的postdata里面输入自己的百度账号
 
