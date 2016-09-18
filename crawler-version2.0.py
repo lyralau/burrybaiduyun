@@ -19,6 +19,7 @@ def getArticleList():
     contentList = open("wenzhang_full_backup.htm", "r").readlines()
     articleList = []
     # print len(contentList)
+    #read article urls
     for content in contentList:
         s = 0
         while True:
@@ -32,11 +33,12 @@ def getArticleList():
     return articleList
 
 def access1():
+    #cookie file in Chrome
     filename = 'cookie.sqlite'
     cookie = cookielib.LWPCookieJar(filename)
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))
     '''postdata = urllib.urlencode({
-        'userName':'lala92',
+        'userName':'username,
         'password':'password'
     })
     loginUrl = 'https://passport.baidu.com/v2/?login&u=http%3A%2F%2Fwenzhang.baidu.com%2F'
@@ -48,7 +50,6 @@ def access1():
 
 if __name__ == "__main__":
     output2txt = True
-
     #url="https://wenzhang.baidu.com/page/view?key=168a2f0785435838-1426607065"
     #writerList = open("output.txt", "w")
 
@@ -57,7 +58,7 @@ if __name__ == "__main__":
     urls = getArticleList()
     # print urls
     articles = []
-    #set xml
+    #set xml root
     impl = xml.dom.minidom.getDOMImplementation()  
     dom = impl.createDocument(None, 'lofterBlogExport', None)  
     root = dom.documentElement
@@ -72,11 +73,6 @@ if __name__ == "__main__":
     nameY = dom.createTextNode("2016-09-12 22:04")
     BlogDomain.appendChild(nameT)
     ExportTime.appendChild(nameY)
-    # print dom
-    # f= open('f:\\config_new.xml', 'a')  
-    # dom.writexml(f, addindent='  ', newl='\n')  
-    # f.close()    
-
 
     for i, url in enumerate(urls):
         # Set up conn and cookies
@@ -95,7 +91,7 @@ if __name__ == "__main__":
         title = soup.title.string[1:-8]
         time_re = re.search(r'\d{4}-\d{2}-\d{2}', soup2.body.find('div', attrs={'class':'time-cang'}).string)
         time1 = time_re.group(0) if time_re else '0000-00-00'
-
+        #process tags and encoding
         content = ""
         content_div = soup2.body.find('div', id='detailArticleContent_ptkaiapt4bxy_baiduscarticle')
         tags = content_div.find_all('p')
@@ -103,7 +99,6 @@ if __name__ == "__main__":
             # case 1: newer articles (>2011) use <p> or <p><span> to make new paragraphs
             for tag in tags:
                 content = content + str(tag).replace('\n', '') + '\n'
-                # print str(tag) +'】】】】】】'
         else:
             # case 2: older baidu articles use <br> to make new paragraphs
             for br in soup2.find_all('br'):
@@ -130,7 +125,7 @@ if __name__ == "__main__":
             # writerList.write(time + '\n\n')
             # writerList.write(content.encode("utf-8") + '\n')
             # writerList.write('+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n\n')
-
+            #set dom tree for xml output
             PostItem = dom.createElement('PostItem') 
             xmltitle = dom.createElement('title') 
             publishTime = dom.createElement('publishTime')  
@@ -156,14 +151,13 @@ if __name__ == "__main__":
             publishTime.appendChild(item2)
             ttype.appendChild(item3)
             content1.appendChild(item4)
-
+            #debug title
             print item1.nodeValue
 
 
     # Write to obj
     cPickle.dump(articles, open("articles.obj", "wb"))
     # f= open('output.xml', 'a')  
+    #output xml to result file
     dom.writexml(f, addindent='  ', newl='\n')  
-    #print dom
     f.close() 
-    # writerList.close()
