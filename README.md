@@ -1,4 +1,4 @@
-# Read Me About Burrybaiduyun
+# Read Me About Burybaiduyun
 因为百度在去年关闭了百度空间，把里面的全部博文都搬到了百度云的文章里面，然后也没提供搬迁功能，导致现在文章取不出来
 现在我学了下python，借鉴了几位作者的代码，希望能实现导出功能，把百度云的文章导出XML格式的文件
 主要用来导入网易的LOFTER
